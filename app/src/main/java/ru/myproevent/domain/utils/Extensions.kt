@@ -10,6 +10,7 @@ import ru.myproevent.domain.models.entities.Address
 import ru.myproevent.domain.models.entities.Contact
 import ru.myproevent.domain.models.entities.Contact.Status
 import ru.myproevent.domain.models.entities.Event
+import ru.myproevent.domain.models.entities.Interval
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -92,3 +93,15 @@ fun pxValue(dp: Float) = TypedValue.applyDimension(
     dp,
     Resources.getSystem().displayMetrics
 )
+
+fun MutableList<Interval>.mergeIntersectingIntervals() {
+    val valuesToRemove = mutableListOf<Interval>()
+    val prevInterval = this.first()
+    for (interval in this) {
+        if (interval.start <= prevInterval.end) {
+            interval.start = prevInterval.start
+            valuesToRemove.add(prevInterval)
+        }
+    }
+    this.removeAll(valuesToRemove)
+}

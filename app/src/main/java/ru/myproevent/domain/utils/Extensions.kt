@@ -96,12 +96,15 @@ fun pxValue(dp: Float) = TypedValue.applyDimension(
 
 fun MutableList<Interval>.mergeIntersectingIntervals() {
     val valuesToRemove = mutableListOf<Interval>()
-    val prevInterval = this.first()
+    var prevInterval: Interval? = null
     for (interval in this) {
-        if (interval.start <= prevInterval.end) {
-            interval.start = prevInterval.start
-            valuesToRemove.add(prevInterval)
+        prevInterval?.let { prevInterval ->
+            if (interval.start <= prevInterval.end) {
+                interval.start = prevInterval.start
+                valuesToRemove.add(prevInterval)
+            }
         }
+        prevInterval = interval
     }
     this.removeAll(valuesToRemove)
 }

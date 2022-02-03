@@ -1,5 +1,6 @@
 package ru.myproevent.domain.utils
 
+import android.util.Log
 import ru.myproevent.domain.models.entities.EventDate
 import ru.myproevent.domain.models.entities.Interval
 
@@ -21,10 +22,13 @@ class EventDateUseCases {
             for (eventDate in eventDates) {
                 with(eventDate) {
                     timeIntervals.add(currDateInterval)
-                    repeatIntervalValue?.let { repeatValue ->
-                        val repeatIntervalStart = repeatValue.interval.start
+                    repeatValue?.let { repeatValue ->
                         val firstRepeatedDateIntervalStart =
-                            repeatIntervalStart - ((repeatIntervalStart - currDateInterval.start) % repeatValue.repeatFrequency) + repeatValue.repeatFrequency
+                            //repeatValue.interval.start - (repeatValue.interval.start - currDateInterval.end) % repeatValue.repeatFrequency + repeatValue.repeatFrequency
+                            repeatValue.interval.start + (repeatValue.interval.start - currDateInterval.end) % repeatValue.repeatFrequency + (currDateInterval.end - currDateInterval.start) + repeatValue.repeatFrequency
+
+                        Log.d("[TEST]", "firstRepeatedDateIntervalStart: $firstRepeatedDateIntervalStart")
+
                         var repeatedDateInterval = Interval(
                             firstRepeatedDateIntervalStart,
                             firstRepeatedDateIntervalStart + (currDateInterval.end - currDateInterval.start)
@@ -32,8 +36,8 @@ class EventDateUseCases {
                         while (repeatedDateInterval.start <= repeatValue.interval.end) {
                             timeIntervals.add(repeatedDateInterval)
                             repeatedDateInterval = Interval(
-                                repeatedDateInterval.start + repeatValue.repeatFrequency,
-                                repeatedDateInterval.end + repeatValue.repeatFrequency
+                                repeatedDateInterval.end + repeatValue.repeatFrequency,
+                                repeatedDateInterval.end + repeatValue.repeatFrequency + (currDateInterval.end - currDateInterval.start)
                             )
                         }
                     }

@@ -47,8 +47,14 @@ class ProEventApp : Application() {
         Log.d(
             "[TEST]", "toTimeIntervals: ${
                 EventDateUseCases.toTimeIntervals(
+//                    listOf(
+//                        EventDate(Interval(7, 11), RepeatInterval(Interval(9, 17), 3))
+//                    )
+//                    listOf(
+//                        EventDate(Interval(7, 9), RepeatInterval(Interval(8, 19), 4))
+//                    )
                     listOf(
-                        EventDate(Interval(7, 11), RepeatInterval(Interval(9, 17), 3))
+                        EventDate(Interval(7, 14), RepeatInterval(Interval(9, 17), 3))
                     )
                 )
             }"
